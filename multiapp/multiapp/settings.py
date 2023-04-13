@@ -33,32 +33,19 @@ ALLOWED_HOSTS = ['*']
 SHARED_APPS = (
     'django_tenants',  # mandatory
     'customers', # you must list the app where your tenant model resides in
-
-    'django.contrib.contenttypes',
-
-    # everything below here is optional
-    'django.contrib.auth',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.admin',
-)
-
-TENANT_APPS = (
-    'general',
-    # your tenant-specific apps
-)
-
-INSTALLED_APPS = [
-    'django_tenants',  # mandatory
-    'customers', # you must list the app where your tenant model resides in
-    'general',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-]
+)
+
+TENANT_APPS = (
+    'general',
+)
+
+INSTALLED_APPS = list(SHARED_APPS) + [app for app in TENANT_APPS if app not in SHARED_APPS]
 
 MIDDLEWARE = [
     'django_tenants.middleware.main.TenantMainMiddleware',
@@ -111,7 +98,6 @@ DATABASE_ROUTERS = (
 )
 
 TENANT_MODEL = "customers.Client" # app.Model
-
 TENANT_DOMAIN_MODEL = "customers.Domain"  # app.Model
 
 # Password validation
